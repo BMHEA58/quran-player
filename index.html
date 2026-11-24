@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+    <meta name="author" content="BMHEA58">
+    <meta name="description" content="مشغل تلاوات القرآن الكريم مع النص والترجمة - يعمل على جميع الأجهزة دون اتصال">
+    <meta name="theme-color" content="#0f2027">
+    <meta name="color-scheme" content="dark">
+
+    <!-- iOS / Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="القرآن">
+    <!-- Android / Chrome -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+
+    <!-- Windows / Edge -->
+    <meta name="msapplication-TileColor" content="#0f2027">
+    <meta name="msapplication-TileImage" content="./icons/icon-144.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <title>🕌 مشغل القرآن الكريم</title>
+</head>
+<body>
+    <header>
+        <h1>🕌 القرآن الكريم</h1>
+        <p>استمع لتلاوات أشهر القراء مع تزامن النص والترجمة</p>
+    </header>
+
+    <main>
+        <div class="top-controls">
+            <section class="selector">
+                <label for="reciter">القارئ:</label>
+                <select id="reciter"><option value="">جاري التحميل...</option></select>
+            </section>
+            <section class="selector">
+                <label for="surah">السورة:</label>
+                <select id="surah" disabled><option value="">اختر قارئاً أولاً</option></select>
+            </section>
+            <section class="selector">
+                <label for="mode">وضع العرض:</label>
+                <select id="mode">
+                    <option value="both">النص + الصوت</option>
+                    <option value="audio">الصوت فقط</option>
+                </select>
+            </section>
+        </div>
+
+        <section class="player" id="player" hidden>
+            <div class="now-playing">
+                <h3 id="nowPlaying">—</h3>
+                <p id="nowReciter"></p>
+            </div>
+            <audio id="audio" controls></audio>
+            <div class="controls">
+                <button id="prevBtn" title="السورة السابقة">⏮️</button>
+                <button id="playPauseBtn">▶️</button>
+                <button id="nextBtn" title="السورة التالية">⏭️</button>
+                <button id="downloadBtn" title="تحميل السورة">⬇️</button>
+            </div>
+            <div id="downloadProgress" class="download-progress" hidden>
+                <div class="bar"><div class="fill" id="dlFill"></div></div>
+                <span id="dlText">0%</span>
+            </div>
+            <div class="extras">
+                <label><input type="checkbox" id="autoplayNext" checked> التكرار التلقائي</label>
+                <label><input type="checkbox" id="highlight" checked> إبراز الآية الجارية</label>
+                <label><input type="checkbox" id="showTranslation"> عرض الترجمة الإنجليزية</label>
+                <label>السرعة:
+                    <input type="range" id="speed" min="0.5" max="1.5" step="0.1" value="1">
+                    <span id="speedVal">1.0x</span>
+                </label>
+            </div>
+            <div class="progress-info">
+                <span id="currentAyah">الآية: —</span>
+                <span id="totalAyahs"></span>
+            </div>
+        </section>
+
+        <section class="quran-text" id="quranText" hidden>
+            <div class="surah-header" id="surahHeader"></div>
+            <div class="ayahs-container" id="ayahsContainer"></div>
+        </section>
+
+        <div id="loading" class="loading">⏳ جاري التحميل...</div>
+        <div id="error" class="error" hidden></div>
+    </main>
+
+    <footer>
+        <p>المصادر: <a href="https://mp3quran.net" target="_blank">mp3quran.net</a> •
+        <a href="https://alquran.cloud" target="_blank">alquran.cloud</a> •
+        <a href="https://everyayah.com" target="_blank">everyayah.com</a></p>
+        <p>تطوير: <strong>BMHEA58</strong></p>
+    </footer>
+
+    <button id="installBtn" class="install-btn" hidden>📲 تثبيت التطبيق</button>
+    <div id="offlineBadge" class="offline-badge" hidden>📡 غير متصل</div>
+
+    <script src="quran-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
