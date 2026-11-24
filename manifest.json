@@ -1,0 +1,17 @@
+{
+  "name": "مشغل القرآن الكريم — Quran Player",
+  "short_name": "القرآن",
+  "description": "مشغل تلاوات القرآن الكريم مع النص العثماني والترجمة",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f2027",
+  "theme_color": "#0f2027",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
