@@ -1,0 +1,52 @@
+```yaml
+name: 🚀 نشر على GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: 🔨 بناء
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 📦 تحضير النشر
+        run: |
+          mkdir -p dist
+          cp -r *.html *.css *.js *.json dist/ 2>/dev/null || true
+          cp -r icons dist/ 2>/dev/null || true
+          cp -r .well-known dist/ 2>/dev/null || true
+          cp .nojekyll dist/
+          echo "📁 محتويات dist:"
+          ls -la dist/
+
+      - name: 📤 رفع الأثر
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    name: 🌐 نشر
+    needs: build
+
+    steps:
+      - name: 🚀 النشر
+        id: deployment
+        uses: actions/deploy-pages@v4
