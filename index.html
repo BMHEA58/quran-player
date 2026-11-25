@@ -7,113 +7,102 @@
     <meta name="description" content="مشغل تلاوات القرآن الكريم مع النص والترجمة - يعمل على جميع الأجهزة دون اتصال">
     <meta name="theme-color" content="#0f2027">
     <meta name="color-scheme" content="dark">
+
+    <!-- iOS / Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="القرآن">
     <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+
+    <!-- Android / Chrome -->
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16.png">
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+
+    <!-- Windows / Edge -->
+    <meta name="msapplication-TileColor" content="#0f2027">
+    <meta name="msapplication-TileImage" content="./icons/icon-144.png">
+
+    <!-- PWA -->
     <link rel="manifest" href="./manifest.json">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
     <title>🕌 مشغل القرآن الكريم</title>
 </head>
 <body>
-    <!-- شريط علوي مبسط -->
-    <header class="top-bar">
+    <header>
         <h1>🕌 القرآن الكريم</h1>
-        <div class="top-actions">
-            <button id="randomBtn" class="icon-btn" title="تشغيل عشوائي">🎲</button>
-            <button id="installBtn" class="icon-btn" title="تثبيت التطبيق" hidden>📲</button>
-            <span id="offlineBadge" class="offline-badge" hidden>📡</span>
-        </div>
+        <p>استمع لتلاوات أشهر القراء مع النص والترجمة</p>
     </header>
 
-    <main class="main-grid">
-        <!-- العمود الأيسر: المشغل + الاختيارات -->
-        <aside class="player-column">
-            <div class="selector-group">
-                <label for="reciterSearch">القارئ:</label>
-                <div class="searchable-select" id="reciterSelectWrapper">
-                    <input type="text" id="reciterSearch" placeholder="🔍 ابحث عن قارئ..." autocomplete="off">
-                    <div class="dropdown-list" id="reciterDropdown" hidden></div>
-                </div>
-            </div>
-
-            <div class="selector-group">
-                <label for="surahSelect">السورة:</label>
-                <select id="surahSelect" disabled><option value="">اختر قارئاً أولاً</option></select>
-            </div>
-
-            <div class="selector-group">
-                <label for="modeSelect">وضع العرض:</label>
-                <select id="modeSelect">
+    <main>
+        <div class="top-controls">
+            <section class="selector">
+                <label for="reciter">القارئ:</label>
+                <select id="reciter"><option value="">جاري التحميل...</option></select>
+            </section>
+            <section class="selector">
+                <label for="surah">السورة:</label>
+                <select id="surah" disabled><option value="">اختر قارئاً أولاً</option></select>
+            </section>
+            <section class="selector">
+                <label for="mode">وضع العرض:</label>
+                <select id="mode">
                     <option value="both">النص + الصوت</option>
                     <option value="audio">الصوت فقط</option>
                 </select>
-            </div>
+            </section>
+        </div>
 
-            <!-- بطاقة "الآن يُشغَّل" -->
-            <div class="now-playing-card" id="nowPlayingCard" hidden>
-                <div class="np-cover">🕌</div>
-                <div class="np-info">
-                    <h3 id="nowPlayingTitle">—</h3>
-                    <p id="nowReciterName"></p>
-                    <span id="currentAyahBadge" class="badge">الآية: —</span>
-                </div>
+        <section class="player" id="player" hidden>
+            <div class="now-playing">
+                <h3 id="nowPlaying">—</h3>
+                <p id="nowReciter"></p>
             </div>
-
-            <!-- خيارات إضافية -->
-            <div class="extras-card">
-                <label><input type="checkbox" id="autoplayNext" checked> التكرار التلقائي</label>
-                <label><input type="checkbox" id="highlightAyah" checked> إبراز الآية الجارية</label>
-                <label><input type="checkbox" id="showTranslation"> عرض الترجمة الإنجليزية</label>
-                <label class="speed-row">السرعة:
-                    <input type="range" id="speedRange" min="0.5" max="1.5" step="0.1" value="1">
-                    <span id="speedLabel">1.0x</span>
-                </label>
+            <audio id="audio" controls></audio>
+            <div class="controls">
+                <button id="prevBtn" title="السورة السابقة">⏮️</button>
+                <button id="playPauseBtn">▶️</button>
+                <button id="nextBtn" title="السورة التالية">⏭️</button>
+                <button id="downloadBtn" title="تحميل السورة">⬇️</button>
             </div>
-
             <div id="downloadProgress" class="download-progress" hidden>
                 <div class="bar"><div class="fill" id="dlFill"></div></div>
                 <span id="dlText">0%</span>
             </div>
-        </aside>
+            <div class="extras">
+                <label><input type="checkbox" id="autoplayNext" checked> التكرار التلقائي</label>
+                <label><input type="checkbox" id="showTranslation"> عرض الترجمة الإنجليزية</label>
+                <label>السرعة:
+                    <input type="range" id="speed" min="0.5" max="1.5" step="0.1" value="1">
+                    <span id="speedVal">1.0x</span>
+                </label>
+            </div>
+        </section>
 
-        <!-- العمود الأيمن: النص القرآني -->
-        <section class="text-column" id="textColumn" hidden>
+        <section class="quran-text" id="quranText" hidden>
             <div class="surah-header" id="surahHeader"></div>
             <div class="ayahs-container" id="ayahsContainer"></div>
         </section>
+
+        <div id="loading" class="loading">⏳ جاري التحميل...</div>
+        <div id="error" class="error" hidden></div>
     </main>
 
-    <!-- شريط التحكم السفلي الثابت (Sticky Player) -->
-    <div class="sticky-player" id="stickyPlayer" hidden>
-        <div class="sp-track-info">
-            <div class="sp-cover">🕌</div>
-            <div class="sp-text">
-                <span id="spTitle">—</span>
-                <small id="spReciter"></small>
-            </div>
-        </div>
+    <footer>
+        <p>المصادر: <a href="https://mp3quran.net" target="_blank">mp3quran.net</a> •
+        <a href="https://alquran.cloud" target="_blank">alquran.cloud</a></p>
+        <p>تطوير: <strong>BMHEA58</strong></p>
+    </footer>
 
-        <div class="sp-controls">
-            <button id="spPrev" class="sp-btn" title="السورة السابقة">⏮️</button>
-            <button id="spPlayPause" class="sp-btn main-btn" title="تشغيل / إيقاف">▶️</button>
-            <button id="spNext" class="sp-btn" title="السورة التالية">⏭️</button>
-            <button id="spDownload" class="sp-btn" title="تحميل السورة">⬇️</button>
-        </div>
-
-        <div class="sp-progress">
-            <span id="spCurrentTime">0:00</span>
-            <input type="range" id="spSeek" min="0" max="100" value="0" step="0.1">
-            <span id="spDuration">0:00</span>
-        </div>
-    </div>
-
-    <!-- عنصر صوت مخفي (نستخدم أزرارنا المخصصة) -->
-    <audio id="audio" preload="metadata"></audio>
-
-    <div id="loading" class="loading-overlay">⏳ جاري التحميل...</div>
-    <div id="errorToast" class="error-toast" hidden></div>
+    <button id="installBtn" class="install-btn" hidden>📲 تثبيت التطبيق</button>
+    <div id="offlineBadge" class="offline-badge" hidden>📡 غير متصل</div>
 
     <script src="quran-data.js"></script>
     <script src="app.js"></script>
